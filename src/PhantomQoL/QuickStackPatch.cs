@@ -18,6 +18,7 @@ public static class QuickStackPatch {
             if (itemType > 0 && !map.ContainsKey(itemType))
                 map[itemType] = i;
         }
+
         return map;
     }
 
@@ -25,7 +26,7 @@ public static class QuickStackPatch {
     public static void Prefix(Player player) {
         if (!_config.QuickStackBannersEnabled) return;
 
-        var counts = BannerSystem.GetClaimableBannerCounts();
+        var  counts   = BannerSystem.GetClaimableBannerCounts();
         bool anyAdded = false;
 
         // Slots 10-49 are main inventory (0-9 is hotbar) — matches vanilla QuickStack scope
@@ -34,12 +35,12 @@ public static class QuickStackPatch {
             if (item.IsAir || item.favorited) continue;
             if (!_itemToBanner.TryGetValue(item.type, out int bannerType)) continue;
 
-            int room = ushort.MaxValue - counts[bannerType];
+            int room  = ushort.MaxValue - counts[bannerType];
             int toAdd = Math.Min(item.stack, room);
             if (toAdd <= 0) continue;
 
             counts[bannerType] += (ushort)toAdd;
-            item.stack -= toAdd;
+            item.stack         -= toAdd;
             if (item.stack <= 0) item.TurnToAir();
             anyAdded = true;
         }

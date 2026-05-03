@@ -1,17 +1,9 @@
 ﻿{
   "id": "phantom-qol",
   "name": "Phantom's QoL",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Phantom",
   "description": "Miscellaneous QoL things by Phantom",
   "entry_dll": "PhantomQoL.dll",
   "icon": "icon.png",
-  "keybinds": [
-    {
-      "id": "toggle-instant-crates",
-      "label": "Toggle Instant Crates",
-      "description": "Toggles the instant crate opening feature",
-      "default": "F9"
-    }
-  ]
 }

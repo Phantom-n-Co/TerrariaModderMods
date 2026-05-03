@@ -1,7 +1,4 @@
-using System;
-using System.Threading;
 using HarmonyLib;
-using Terraria;
 using TerrariaModder.Core;
 using TerrariaModder.Core.Logging;
 
@@ -10,32 +7,25 @@ namespace PhantomQoL;
 public class Mod : IMod {
     public string Id      => "phantom-qol";
     public string Name    => "Phantom's QoL";
-    public string Version => "1.0.0";
+    public string Version => "1.1.0";
 
-    private const string harmonyId = "phantom.qol";
+    private const string harmonyId = "dev.wp.qol";
 
     public static ILogger       _log;
     public static PhantomConfig _config;
+    private       Harmony       _harmony;
 
     public void Initialize(ModContext context) {
-        _log    = context.Logger;
-        _config = context.GetConfig<PhantomConfig>();
+        _log     = context.Logger;
+        _config  = context.GetConfig<PhantomConfig>();
+        _harmony = new Harmony(harmonyId);
 
         _log.Info("Phantom's QoL initialized.");
-
-        context.RegisterKeybind("toggle-instant-crates", "Toggle Instant Crates",
-            "Toggles the instant crate opening feature", "F9", OnTogglePressed);
     }
 
-    public void OnConfigChanged() {
-        _log.Info("Config changed - reloading settings");
-    }
+    public void OnConfigChanged() { }
 
-    private void OnTogglePressed() {
-        _config.InstanCratesEnabled = !_config.InstanCratesEnabled;
-        _config.Save();
-        _log.Info($"Feature is now: {(_config.InstanCratesEnabled ? "ENABLED" : "DISABLED")}");
+    public void Unload() {
+        _harmony.UnpatchAll(harmonyId);
     }
-
-    public void Unload() { }
 }

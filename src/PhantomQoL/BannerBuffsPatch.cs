@@ -9,15 +9,15 @@ namespace PhantomQoL;
 public static class BannerBuffsPatch {
     [HarmonyPostfix]
     public static void PostFix() {
-        if (_config.BannerBuffEnabled) {
-            var claimableBannerCounts = BannerSystem.GetClaimableBannerCounts();
-            for (var banner = 1; banner < claimableBannerCounts.Length; ++banner) {
-                var num = claimableBannerCounts[banner];
-                if (num <= 0) continue;
+        if (!_config.BannerBuffEnabled) return;
 
-                Main.SceneMetrics.NPCBannerBuff[banner] = true;
-                Main.SceneMetrics.hasBanner             = true;
-            }
+        var claimableBannerCounts = BannerSystem.GetClaimableBannerCounts();
+        for (var banner = 1; banner < claimableBannerCounts.Length; ++banner) {
+            var num = claimableBannerCounts[banner];
+            if (num <= 0) continue;
+
+            Main.SceneMetrics.NPCBannerBuff[banner] = true;
+            Main.SceneMetrics.hasBanner             = true;
         }
     }
 }
