@@ -5,5 +5,5 @@
   "author": "Phantom",
   "description": "Miscellaneous QoL things by Phantom",
   "entry_dll": "PhantomQoL.dll",
-  "icon": "icon.png",
+  "icon": "icon.png"
 }
