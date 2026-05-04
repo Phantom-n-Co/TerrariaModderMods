@@ -17,4 +17,8 @@ public class PhantomConfig : ModConfig {
      Description(
          "When enabled, pressing Quick Stack sends banner items from your inventory into the claimable banner pool.")]
     public bool QuickStackBannersEnabled { get; set; } = true;
+
+    [Client, Label("No Cracked Dungeon Bricks"),
+     Description("When enabled, prevents cracked dungeon bricks from generating during world creation.")]
+    public bool NoCrackedDungeonBricksEnabled { get; set; } = true;
 }

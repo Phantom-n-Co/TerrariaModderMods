@@ -7,7 +7,7 @@ namespace PhantomQoL;
 public class Mod : IMod {
     public string Id      => "phantom-qol";
     public string Name    => "Phantom's QoL";
-    public string Version => "1.1.0";
+    public string Version => "1.2.0";
 
     private const string harmonyId = "dev.wp.qol";
 
@@ -19,6 +19,10 @@ public class Mod : IMod {
         _log     = context.Logger;
         _config  = context.GetConfig<PhantomConfig>();
         _harmony = new Harmony(harmonyId);
+
+        context.RegisterKeybind("remove-cracked-bricks", "Remove Cracked Dungeon Bricks",
+            "Scans the world and removes cracked dungeon bricks", "None",
+            CrackedDungeonBrickPatch.RemoveExistingCrackedBricks);
 
         _log.Info("Phantom's QoL initialized.");
     }
