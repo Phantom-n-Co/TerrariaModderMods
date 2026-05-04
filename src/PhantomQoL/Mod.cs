@@ -1,4 +1,5 @@
 using HarmonyLib;
+using PhantomQoL.Patches;
 using TerrariaModder.Core;
 using TerrariaModder.Core.Logging;
 
