@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.GameContent;
 using static PhantomQoL.Mod;
 
-namespace PhantomQoL;
+namespace PhantomQoL.Patches;
 
 [HarmonyPatch(typeof(SceneMetrics), nameof(SceneMetrics.Scan))]
 public static class BannerBuffsPatch {

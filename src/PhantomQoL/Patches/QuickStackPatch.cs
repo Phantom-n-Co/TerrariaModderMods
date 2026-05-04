@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.GameContent;
 using static PhantomQoL.Mod;
 
-namespace PhantomQoL;
+namespace PhantomQoL.Patches;
 
 [HarmonyPatch(typeof(QuickStacking), nameof(QuickStacking.QuickStackToNearbyInventories))]
 public static class QuickStackPatch {

@@ -3,7 +3,7 @@ using HarmonyLib;
 using Terraria;
 using static PhantomQoL.Mod;
 
-namespace PhantomQoL;
+namespace PhantomQoL.Patches;
 
 [HarmonyPatch(typeof(Terraria.UI.ItemSlot), "TryOpenContainer")]
 public static class OpenCratesPatch {
