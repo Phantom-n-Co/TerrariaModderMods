@@ -35,9 +35,9 @@ public static class CrackedDungeonBrickPatch {
         }
 
         string msg = removed > 0
-            ? $"[PhantomQoL] Removed {removed} cracked dungeon bricks."
-            : "[PhantomQoL] No cracked dungeon bricks found.";
-        Main.NewText(msg, 0, 200, 200);
+            ? $"Removed {removed} cracked dungeon bricks."
+            : "No cracked dungeon bricks found.";
+        Main.NewText($"[PhantomQoL] {msg}", 0, 200, 200);
         _log.Info(msg);
     }
 }
