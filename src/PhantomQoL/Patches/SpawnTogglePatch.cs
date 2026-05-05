@@ -17,8 +17,7 @@ using static PhantomQoL.Mod;
 namespace PhantomQoL.Patches;
 
 public static class SpawnToggleData {
-    public static readonly HashSet<int> Disabled      = new();
-    public static readonly HashSet<int> BestiaryTypes = new();
+    public static readonly HashSet<int> Disabled = new();
 
     private static string _modFolder;
     private static string _worldName;
@@ -94,7 +93,6 @@ public static class BestiaryButtonCtorPatch {
         var netIdElement = entry.Info.OfType<NPCNetIdBestiaryInfoElement>().FirstOrDefault();
         if (netIdElement == null) return;
         int npcNetId = netIdElement.NetId;
-        SpawnToggleData.BestiaryTypes.Add(NPCID.FromNetId(npcNetId));
         __instance.OnRightClick += (_, _) => OnRightClick(npcNetId);
     }
 
@@ -114,8 +112,8 @@ public static class BestiaryButtonCtorPatch {
             }
         }
 
-        if (!SpawnToggleData.Disabled.Remove(baseType))
-            SpawnToggleData.Disabled.Add(baseType);
+        if (!SpawnToggleData.Disabled.Remove(npcNetId))
+            SpawnToggleData.Disabled.Add(npcNetId);
 
         SpawnToggleData.Save();
     }
@@ -132,7 +130,7 @@ public static class BestiaryButtonDrawPatch {
         var netIdElement = __instance.Entry.Info.OfType<NPCNetIdBestiaryInfoElement>().FirstOrDefault();
         if (netIdElement == null) return;
 
-        bool disabled = SpawnToggleData.Disabled.Contains(NPCID.FromNetId(netIdElement.NetId));
+        bool disabled = SpawnToggleData.Disabled.Contains(netIdElement.NetId);
 
         if (BordersField?.GetValue(__instance) is UIImage borders)
             borders.Color = disabled ? new Color(255, 80, 80) : Color.White;
@@ -144,17 +142,7 @@ public static class NewNpcPatch {
     [HarmonyPrefix]
     public static bool Prefix(int Type, ref int __result) {
         if (!_config.SpawnToggleEnabled) return true;
-        int baseType = NPCID.FromNetId(Type);
-
-        bool blocked = SpawnToggleData.Disabled.Contains(baseType);
-
-        if (!blocked && SpawnToggleData.BestiaryTypes.Count > 0 && !SpawnToggleData.BestiaryTypes.Contains(baseType)) {
-            int banner = BannerSystem.NPCtoBanner(baseType);
-            if (banner != 0)
-                blocked = SpawnToggleData.Disabled.Any(d => BannerSystem.NPCtoBanner(d) == banner);
-        }
-
-        if (!blocked) return true;
+        if (!SpawnToggleData.Disabled.Contains(Type) && !SpawnToggleData.Disabled.Contains(NPCID.FromNetId(Type))) return true;
         __result = Main.maxNPCs;
         if (SpawnAnNpcPatch.InSpawnerContext)
             SpawnAnNpcPatch.RerollNeeded = true;
