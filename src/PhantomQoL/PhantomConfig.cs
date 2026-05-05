@@ -21,4 +21,8 @@ public class PhantomConfig : ModConfig {
     [Client, Label("No Cracked Dungeon Bricks"),
      Description("When enabled, prevents cracked dungeon bricks from generating during world creation.")]
     public bool NoCrackedDungeonBricksEnabled { get; set; } = true;
+
+    [Client, Server, Label("Spawn Toggle Enabled"),
+     Description("When enabled, right-click NPC entries in the bestiary to toggle their spawning (requires one banner's worth of kills).")]
+    public bool SpawnToggleEnabled { get; set; } = true;
 }

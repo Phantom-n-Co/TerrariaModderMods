@@ -1,17 +1,9 @@
 ﻿{
   "id": "phantom-qol",
   "name": "Phantom's QoL",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": "Phantom",
   "description": "Miscellaneous QoL things by Phantom",
   "entry_dll": "PhantomQoL.dll",
-  "icon": "icon.png",
-  "keybinds": [
-    {
-      "id": "remove-cracked-bricks",
-      "label": "Remove Cracked Dungeon Bricks",
-      "description": "Scans the world and removes cracked dungeon bricks",
-      "default": "None"
-    }
-  ]
+  "icon": "icon.png"
 }
