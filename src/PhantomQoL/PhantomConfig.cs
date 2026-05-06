@@ -39,6 +39,8 @@ public class PhantomConfig : ModConfig {
     public bool PylonTweaks { get; set; } = true;
 
     [Server, RestartRequired, Label("Item Magnet"),
-     Description("Enables the Item Magnet item. Purchase from the Merchant.")]
+     Description("Disabling will not remove the item,"         +
+                 "\nbut it will not be available for purchase" +
+                 "\nand the item will not have any effect")]
     public bool ItemMagnet { get; set; } = true;
 }
