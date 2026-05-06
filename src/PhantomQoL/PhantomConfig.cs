@@ -29,6 +29,6 @@ public class PhantomConfig : ModConfig {
 
     [Client, Label("Pylon Tweaks"),
      Description("Pylons won't need to be near to spawn a player to teleport to them." +
-                 "\nChanges pylons to not need Town NPCs near them.")]
+                 "\nPylons won't need Town NPCs near them.")]
     public bool PylonTweaks { get; set; } = true;
 }
