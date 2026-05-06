@@ -33,7 +33,8 @@ public class PhantomConfig : ModConfig {
     public bool BestiaryToggle { get; set; } = true;
 
     [Client, Label("Pylon Tweaks"),
-     Description("Pylons won't need to be near to spawn a player to teleport to them." +
-                 "\nPylons won't need Town NPCs near them.")]
+     Description("Tweaks:"                      +
+                 "\n - No distance requirement" +
+                 "\n - No TownNPC requirement")]
     public bool PylonTweaks { get; set; } = true;
 }
