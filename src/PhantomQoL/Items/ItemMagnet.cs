@@ -21,6 +21,7 @@ public static class ItemMagnet {
             ModifyTooltips = lines => {
                 if (_config.ItemMagnet) {
                     lines.Add("Pulls in nearby items.");
+                    lines.Add("Works in your inventory.");
                     lines.Add("Right-click to toggle.");
                 }
                 else {
@@ -36,6 +37,7 @@ public static class ItemMagnet {
             ModifyTooltips = lines => {
                 if (_config.ItemMagnet) {
                     lines.Add("Pulls in nearby items.");
+                    lines.Add("Works in your inventory.");
                     lines.Add("Right-click to toggle.");
                 }
                 else {
