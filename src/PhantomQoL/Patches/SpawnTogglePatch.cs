@@ -154,7 +154,7 @@ public static class NewNpcPatch {
 /// <summary>
 /// Due to how "awful" the spawner code is, we have to do this to lessen the chances of reducing spawn rates due to
 /// blocking spawns. I'd like if there was a better way to do this, but this is the best I could come up with.
-/// Or, I might just be stupid, idk, don't care. It works:tm:, which is good enough for now.
+/// Or, I might just be stupid, IDK, don't care. It works:tm:, which is good enough for now.
 /// </summary>
 [HarmonyPatch(typeof(NPC.Spawner), nameof(NPC.Spawner.SpawnAnNPC))]
 public static class SpawnAnNpcPatch {
