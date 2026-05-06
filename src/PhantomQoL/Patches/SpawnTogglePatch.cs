@@ -17,7 +17,7 @@ using static PhantomQoL.Mod;
 namespace PhantomQoL.Patches;
 
 public static class SpawnToggleData {
-    public static readonly HashSet<int> Disabled = new();
+    public static readonly HashSet<int> Disabled = [];
 
     private static string _modFolder;
     private static string _worldName;
@@ -142,7 +142,8 @@ public static class NewNpcPatch {
     [HarmonyPrefix]
     public static bool Prefix(int Type, ref int __result) {
         if (!_config.SpawnToggleEnabled) return true;
-        if (!SpawnToggleData.Disabled.Contains(Type) && !SpawnToggleData.Disabled.Contains(NPCID.FromNetId(Type))) return true;
+        if (!SpawnToggleData.Disabled.Contains(Type) &&
+            !SpawnToggleData.Disabled.Contains(NPCID.FromNetId(Type))) return true;
         __result = Main.maxNPCs;
         if (SpawnAnNpcPatch.InSpawnerContext)
             SpawnAnNpcPatch.RerollNeeded = true;
@@ -174,7 +175,7 @@ public static class SpawnAnNpcPatch {
         if (_retryCount == 0) {
             InSpawnerContext = true;
             _instance        = __instance;
-            _args            = new object[] { spawnTileX, spawnTileY, spawnTileType, xRange, target };
+            _args            = [spawnTileX, spawnTileY, spawnTileType, xRange, target];
         }
 
         RerollNeeded = false;
