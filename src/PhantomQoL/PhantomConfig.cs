@@ -5,27 +5,32 @@ namespace PhantomQoL;
 public class PhantomConfig : ModConfig {
     public override int Version => 1;
 
-    [Client, Label("Open All Crates Enabled"),
+    [Client, Label("Open All Crates"),
+     FormerlySerializedAs("OpenAllCratesEnabled"),
      Description("Open entire stack of crates/bags when opened in the inventory.")]
-    public bool OpenAllCratesEnabled { get; set; } = true;
+    public bool OpenAllCrates { get; set; } = true;
 
-    [Client, Label("Banner Buff Enabled"),
+    [Client, Label("Banner Buff"),
+     FormerlySerializedAs("BannerBuffEnabled"),
      Description("Claimable Banners in the Banner UI apply their buff at all times.")]
-    public bool BannerBuffEnabled { get; set; } = true;
+    public bool BannerBuff { get; set; } = true;
 
-    [Client, Label("Quick Stack Banners Enabled"),
+    [Client, Label("Banner Quick Stack"),
+     FormerlySerializedAs("QuickStackBannersEnabled"),
      Description(
          "Quick Stack sends banner items from your inventory into the claimable banner pool.")]
-    public bool QuickStackBannersEnabled { get; set; } = true;
+    public bool QuickStackBanners { get; set; } = true;
 
     [Client, Label("No Cracked Dungeon Bricks"),
+     FormerlySerializedAs("NoCrackedDungeonBricksEnabled"),
      Description("Prevents cracked dungeon bricks from generating during world creation.")]
-    public bool NoCrackedDungeonBricksEnabled { get; set; } = true;
+    public bool NoCrackedDungeonBricks { get; set; } = true;
 
-    [Client, Server, Label("Spawn Toggle Enabled"),
+    [Client, Label("Bestiary Spawn Toggle"),
+     FormerlySerializedAs("SpawnToggleEnabled"),
      Description(
          "Right-click NPC entries in the bestiary to toggle their spawning (requires one banner's worth of kills).")]
-    public bool SpawnToggleEnabled { get; set; } = true;
+    public bool BestiaryToggle { get; set; } = true;
 
     [Client, Label("Pylon Tweaks"),
      Description("Pylons won't need to be near to spawn a player to teleport to them." +

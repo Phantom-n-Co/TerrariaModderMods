@@ -97,7 +97,7 @@ public static class BestiaryButtonCtorPatch {
     }
 
     private static void OnRightClick(int npcNetId) {
-        if (!_config.SpawnToggleEnabled) return;
+        if (!_config.BestiaryToggle) return;
 
         var baseType   = NPCID.FromNetId(npcNetId);
         var bannerType = BannerSystem.NPCtoBanner(baseType);
@@ -126,7 +126,7 @@ public static class BestiaryButtonDrawPatch {
 
     [HarmonyPostfix]
     public static void Postfix(UIBestiaryEntryButton __instance) {
-        if (!_config.SpawnToggleEnabled) return;
+        if (!_config.BestiaryToggle) return;
         var netIdElement = __instance.Entry.Info.OfType<NPCNetIdBestiaryInfoElement>().FirstOrDefault();
         if (netIdElement == null) return;
 
@@ -141,7 +141,7 @@ public static class BestiaryButtonDrawPatch {
 public static class NewNpcPatch {
     [HarmonyPrefix]
     public static bool Prefix(int Type, ref int __result) {
-        if (!_config.SpawnToggleEnabled) return true;
+        if (!_config.BestiaryToggle) return true;
         if (!SpawnToggleData.Disabled.Contains(Type) &&
             !SpawnToggleData.Disabled.Contains(NPCID.FromNetId(Type))) return true;
         __result = Main.maxNPCs;

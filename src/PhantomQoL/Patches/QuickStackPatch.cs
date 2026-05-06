@@ -24,7 +24,7 @@ public static class QuickStackPatch {
 
     [HarmonyPrefix]
     public static void Prefix(Player player) {
-        if (!_config.QuickStackBannersEnabled) return;
+        if (!_config.QuickStackBanners) return;
 
         var counts   = BannerSystem.GetClaimableBannerCounts();
         var anyAdded = false;
