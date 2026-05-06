@@ -1,11 +1,11 @@
-﻿using System.Reflection.Emit;
-using HarmonyLib;
-using Terraria.DataStructures;
+﻿using HarmonyLib;
 
 namespace PhantomQoL.Patches;
 
 [HarmonyPatch(typeof(TeleportPylonsSystem))]
 public static class PylonsPatch {
+    public static bool _runningTeleportRequest;
+
     [HarmonyPrefix]
     [HarmonyPatch(nameof(TeleportPylonsSystem.IsPlayerNearAPylon))]
     public static bool Prefix(Player player, ref bool __result) {
@@ -22,22 +22,25 @@ public static class PylonsPatch {
         return false;
     }
 
-    [HarmonyTranspiler]
+    [HarmonyPrefix]
     [HarmonyPatch(nameof(TeleportPylonsSystem.HandleTeleportRequest))]
-    public static IEnumerable<CodeInstruction> Transpiler_HandleTeleportRequest(
-        IEnumerable<CodeInstruction> instructions) {
-        var configField  = AccessTools.Field(typeof(Mod), nameof(_config));
-        var tweaksGetter = AccessTools.PropertyGetter(typeof(PhantomConfig), nameof(PhantomConfig.PylonTweaks));
-        var rangeCheck = AccessTools.Method(typeof(Player), nameof(Player.InTileEntityInteractionRange),
-            [typeof(int), typeof(int), typeof(int), typeof(int), typeof(TileReachCheckSettings)]);
+    public static void HandleTeleportRequestPrefix() {
+        _runningTeleportRequest = true;
+    }
 
-        return new CodeMatcher(instructions)
-            .MatchStartForward(new CodeMatch(i => i.Calls(rangeCheck)))
-            .Advance(1)
-            .Insert(
-                new CodeInstruction(OpCodes.Ldsfld, configField),
-                new CodeInstruction(OpCodes.Callvirt, tweaksGetter),
-                new CodeInstruction(OpCodes.Or))
-            .InstructionEnumeration();
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(TeleportPylonsSystem.HandleTeleportRequest))]
+    public static void HandleTeleportRequestPostfix() {
+        _runningTeleportRequest = false;
+    }
+}
+
+[HarmonyPatch(typeof(Player), nameof(Player.IsInTileInteractionRange))]
+public static class PylonsPlayerPatch {
+    [HarmonyPrefix]
+    public static bool Prefix(ref bool __result) {
+        if (!PylonsPatch._runningTeleportRequest && _config.PylonTweaks) return true;
+        __result = true;
+        return false;
     }
 }
