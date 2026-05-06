@@ -1,7 +1,5 @@
 using HarmonyLib;
 using Terraria.GameContent.Generation.Dungeon;
-using Terraria.ID;
-using static PhantomQoL.Mod;
 
 namespace PhantomQoL.Patches;
 

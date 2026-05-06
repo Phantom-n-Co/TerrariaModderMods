@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using HarmonyLib;
-using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
-using Terraria.UI;
 using TerrariaModder.Core.Assets;
 
 namespace PhantomQoL.Patches;

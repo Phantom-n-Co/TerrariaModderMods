@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,12 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
-using static PhantomQoL.Mod;
 
 namespace PhantomQoL.Patches;
 

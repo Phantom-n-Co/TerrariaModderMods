@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using TerrariaModder.Core;
-using TerrariaModder.Core.Input;
+﻿using TerrariaModder.Core.Input;
 
 namespace PhantomQoL;
 

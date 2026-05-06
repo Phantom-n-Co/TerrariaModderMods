@@ -1,10 +1,7 @@
 ﻿// using TerrariaModder.Core.Events;
-using System;
+
 using PhantomQoL.Patches;
-using Terraria;
-using TerrariaModder.Core;
 using TerrariaModder.Core.Assets;
-using static PhantomQoL.Mod;
 
 namespace PhantomQoL.Items;
 

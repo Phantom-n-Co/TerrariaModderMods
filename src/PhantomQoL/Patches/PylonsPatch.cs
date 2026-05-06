@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Reflection.Emit;
+﻿using System.Reflection.Emit;
 using HarmonyLib;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 
 namespace PhantomQoL.Patches;
 
@@ -12,7 +9,7 @@ public static class PylonsPatch {
     [HarmonyPrefix]
     [HarmonyPatch(nameof(TeleportPylonsSystem.IsPlayerNearAPylon))]
     public static bool Prefix(Player player, ref bool __result) {
-        if (!Mod._config.PylonTweaks) return true;
+        if (!_config.PylonTweaks) return true;
         __result = true;
         return false;
     }
@@ -20,15 +17,16 @@ public static class PylonsPatch {
     [HarmonyPrefix]
     [HarmonyPatch("HowManyNPCsDoesPylonNeed")]
     public static bool Prefix(TeleportPylonInfo info, Player player, ref int __result) {
-        if (!Mod._config.PylonTweaks) return true;
+        if (!_config.PylonTweaks) return true;
         __result = 0;
         return false;
     }
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(TeleportPylonsSystem.HandleTeleportRequest))]
-    public static IEnumerable<CodeInstruction> Transpiler_HandleTeleportRequest(IEnumerable<CodeInstruction> instructions) {
-        var configField  = AccessTools.Field(typeof(Mod), nameof(Mod._config));
+    public static IEnumerable<CodeInstruction> Transpiler_HandleTeleportRequest(
+        IEnumerable<CodeInstruction> instructions) {
+        var configField  = AccessTools.Field(typeof(Mod), nameof(_config));
         var tweaksGetter = AccessTools.PropertyGetter(typeof(PhantomConfig), nameof(PhantomConfig.PylonTweaks));
         var rangeCheck = AccessTools.Method(typeof(Player), nameof(Player.InTileEntityInteractionRange),
             [typeof(int), typeof(int), typeof(int), typeof(int), typeof(TileReachCheckSettings)]);

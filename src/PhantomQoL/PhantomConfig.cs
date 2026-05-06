@@ -43,4 +43,13 @@ public class PhantomConfig : ModConfig {
                  "\nbut it will not be available for purchase" +
                  "\nand the item will not have any effect")]
     public bool ItemMagnet { get; set; } = true;
+
+    [Client, Label("Instant Angler Refresh"),
+     Description("Instantly refresh Angler Quest after completion")]
+    public bool InstantAnglerRefresh { get; set; } = true;
+
+    [Client, Label("Tile Buffs From Inventory"),
+     Description("Campfire, Heart Lantern, Peace Candle, Star in a Bottle, Sunflower, and Cat Bast" +
+                 "\napply their buff while in your inventory or any bank/vault.")]
+    public bool TileBuffsFromInventory { get; set; } = true;
 }

@@ -1,8 +1,5 @@
 ﻿using System.Reflection;
 using HarmonyLib;
-using Terraria;
-using Terraria.UI;
-using static PhantomQoL.Mod;
 
 namespace PhantomQoL.Patches;
 

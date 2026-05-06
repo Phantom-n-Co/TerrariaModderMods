@@ -1,7 +1,4 @@
 ﻿using HarmonyLib;
-using Terraria;
-using Terraria.GameContent;
-using static PhantomQoL.Mod;
 
 namespace PhantomQoL.Patches;
 
