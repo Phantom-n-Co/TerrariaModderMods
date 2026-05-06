@@ -27,7 +27,7 @@ public static class PylonsPatch {
 
     [HarmonyTranspiler]
     [HarmonyPatch(nameof(TeleportPylonsSystem.HandleTeleportRequest))]
-    static IEnumerable<CodeInstruction> Transpiler_HandleTeleportRequest(IEnumerable<CodeInstruction> instructions) {
+    public static IEnumerable<CodeInstruction> Transpiler_HandleTeleportRequest(IEnumerable<CodeInstruction> instructions) {
         var configField  = AccessTools.Field(typeof(Mod), nameof(Mod._config));
         var tweaksGetter = AccessTools.PropertyGetter(typeof(PhantomConfig), nameof(PhantomConfig.PylonTweaks));
         var rangeCheck = AccessTools.Method(typeof(Player), nameof(Player.InTileEntityInteractionRange),

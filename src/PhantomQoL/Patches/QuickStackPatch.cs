@@ -13,8 +13,8 @@ public static class QuickStackPatch {
 
     private static Dictionary<int, int> BuildLookup() {
         var map = new Dictionary<int, int>();
-        for (int i = 1; i < BannerSystem.MaxBannerTypes; i++) {
-            int itemType = BannerSystem.BannerToItem(i);
+        for (var i = 1; i < BannerSystem.MaxBannerTypes; i++) {
+            var itemType = BannerSystem.BannerToItem(i);
             if (itemType > 0 && !map.ContainsKey(itemType))
                 map[itemType] = i;
         }
@@ -26,17 +26,17 @@ public static class QuickStackPatch {
     public static void Prefix(Player player) {
         if (!_config.QuickStackBannersEnabled) return;
 
-        var  counts   = BannerSystem.GetClaimableBannerCounts();
-        bool anyAdded = false;
+        var counts   = BannerSystem.GetClaimableBannerCounts();
+        var anyAdded = false;
 
         // Slots 10-49 are main inventory (0-9 is hotbar) — matches vanilla QuickStack scope
-        for (int i = 10; i < 50; i++) {
-            Item item = player.inventory[i];
+        for (var i = 10; i < 50; i++) {
+            var item = player.inventory[i];
             if (item.IsAir || item.favorited) continue;
-            if (!_itemToBanner.TryGetValue(item.type, out int bannerType)) continue;
+            if (!_itemToBanner.TryGetValue(item.type, out var bannerType)) continue;
 
-            int room  = ushort.MaxValue - counts[bannerType];
-            int toAdd = Math.Min(item.stack, room);
+            var room  = ushort.MaxValue - counts[bannerType];
+            var toAdd = Math.Min(item.stack, room);
             if (toAdd <= 0) continue;
 
             counts[bannerType] += (ushort)toAdd;

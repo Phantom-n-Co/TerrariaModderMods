@@ -28,7 +28,7 @@ public static class SpawnToggleData {
     }
 
     private static string GetWorldFilePath() {
-        string folder = Path.Combine(_modFolder, "worlds", SanitizeName(_worldName));
+        var folder = Path.Combine(_modFolder, "worlds", SanitizeName(_worldName));
         return Path.Combine(folder, "world.json");
     }
 
@@ -36,7 +36,7 @@ public static class SpawnToggleData {
         if (string.IsNullOrEmpty(name)) return "unknown";
         var invalid = Path.GetInvalidFileNameChars();
         var sb      = new StringBuilder();
-        foreach (char c in name)
+        foreach (var c in name)
             sb.Append(Array.IndexOf(invalid, c) < 0 ? c : '_');
         return sb.ToString();
     }
@@ -44,7 +44,7 @@ public static class SpawnToggleData {
     public static void Load() {
         Disabled.Clear();
         if (string.IsNullOrEmpty(_modFolder) || string.IsNullOrEmpty(_worldName)) return;
-        string path    = GetWorldFilePath();
+        var    path    = GetWorldFilePath();
         string content = null;
         if (File.Exists(path))
             content = File.ReadAllText(path);
@@ -55,27 +55,27 @@ public static class SpawnToggleData {
 
     public static void Save() {
         if (string.IsNullOrEmpty(_modFolder) || string.IsNullOrEmpty(_worldName)) return;
-        string path = GetWorldFilePath();
+        var path = GetWorldFilePath();
         SafeWrite(path, Serialize());
     }
 
     private static string Serialize() {
-        string ids = string.Join(", ", Disabled.OrderBy(x => x));
+        var ids = string.Join(", ", Disabled.OrderBy(x => x));
         return $"{{\n  \"disabledNpcTypes\": [{ids}]\n}}\n";
     }
 
     private static void Deserialize(string json) {
         var match = Regex.Match(json, @"""disabledNpcTypes""\s*:\s*\[([^\]]*)\]");
         if (!match.Success) return;
-        foreach (string token in match.Groups[1].Value.Split(','))
-            if (int.TryParse(token.Trim(), out int id))
+        foreach (var token in match.Groups[1].Value.Split(','))
+            if (int.TryParse(token.Trim(), out var id))
                 Disabled.Add(id);
     }
 
     private static void SafeWrite(string path, string content) {
         Directory.CreateDirectory(Path.GetDirectoryName(path) ?? path);
-        string tmp = path + ".tmp";
-        string bak = path + ".bak";
+        var tmp = path + ".tmp";
+        var bak = path + ".bak";
         File.WriteAllText(tmp, content);
         if (File.Exists(path)) {
             if (File.Exists(bak)) File.Delete(bak);
@@ -92,20 +92,20 @@ public static class BestiaryButtonCtorPatch {
     public static void Postfix(UIBestiaryEntryButton __instance, BestiaryEntry entry) {
         var netIdElement = entry.Info.OfType<NPCNetIdBestiaryInfoElement>().FirstOrDefault();
         if (netIdElement == null) return;
-        int npcNetId = netIdElement.NetId;
+        var npcNetId = netIdElement.NetId;
         __instance.OnRightClick += (_, _) => OnRightClick(npcNetId);
     }
 
     private static void OnRightClick(int npcNetId) {
         if (!_config.SpawnToggleEnabled) return;
 
-        int baseType   = NPCID.FromNetId(npcNetId);
-        int bannerType = BannerSystem.NPCtoBanner(baseType);
+        var baseType   = NPCID.FromNetId(npcNetId);
+        var bannerType = BannerSystem.NPCtoBanner(baseType);
         if (bannerType != 0) {
-            int threshold = ItemID.Sets.KillsToBanner[BannerSystem.BannerToItem(bannerType)];
-            int kills     = BannerSystem.GetKillCount(bannerType);
+            var threshold = ItemID.Sets.KillsToBanner[BannerSystem.BannerToItem(bannerType)];
+            var kills     = BannerSystem.GetKillCount(bannerType);
             if (kills < threshold) {
-                string name = Lang.GetNPCName(baseType).Value;
+                var name = Lang.GetNPCName(baseType).Value;
                 Main.NewText($"[PhantomQoL] Need {threshold - kills} more kills of {name} to toggle spawns.", 255, 200,
                     80);
                 return;
@@ -130,7 +130,7 @@ public static class BestiaryButtonDrawPatch {
         var netIdElement = __instance.Entry.Info.OfType<NPCNetIdBestiaryInfoElement>().FirstOrDefault();
         if (netIdElement == null) return;
 
-        bool disabled = SpawnToggleData.Disabled.Contains(netIdElement.NetId);
+        var disabled = SpawnToggleData.Disabled.Contains(netIdElement.NetId);
 
         if (BordersField?.GetValue(__instance) is UIImage borders)
             borders.Color = disabled ? new Color(255, 80, 80) : Color.White;

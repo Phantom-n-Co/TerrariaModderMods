@@ -11,7 +11,7 @@ public static class CrackedDungeonBrickPatch {
     [HarmonyPrefix]
     public static bool Prefix(ushort tileType) {
         if (!_config.NoCrackedDungeonBricksEnabled) return true;
-        return tileType < TileID.CrackedBlueDungeonBrick || tileType > TileID.CrackedPinkDungeonBrick;
+        return tileType is < TileID.CrackedBlueDungeonBrick or > TileID.CrackedPinkDungeonBrick;
     }
 
     public static void RemoveExistingCrackedBricks() {
@@ -20,13 +20,13 @@ public static class CrackedDungeonBrickPatch {
             return;
         }
 
-        int removed = 0;
-        for (int x = 0; x < Main.maxTilesX; x++) {
-            for (int y = 0; y < Main.maxTilesY; y++) {
-                Tile tile = Main.tile[x, y];
+        var removed = 0;
+        for (var x = 0; x < Main.maxTilesX; x++) {
+            for (var y = 0; y < Main.maxTilesY; y++) {
+                var tile = Main.tile[x, y];
                 if (!tile.active()) continue;
-                ushort t = tile.type;
-                if (t < TileID.CrackedBlueDungeonBrick || t > TileID.CrackedPinkDungeonBrick) continue;
+                var t = tile.type;
+                if (t is < TileID.CrackedBlueDungeonBrick or > TileID.CrackedPinkDungeonBrick) continue;
                 tile.active(false);
                 WorldGen.SquareTileFrame(x, y);
                 if (Main.netMode == 2) NetMessage.SendTileSquare(-1, x, y, 1);
@@ -34,7 +34,7 @@ public static class CrackedDungeonBrickPatch {
             }
         }
 
-        string msg = removed > 0
+        var msg = removed > 0
             ? $"Removed {removed} cracked dungeon bricks."
             : "No cracked dungeon bricks found.";
         Main.NewText($"[PhantomQoL] {msg}", 0, 200, 200);
