@@ -37,4 +37,8 @@ public class PhantomConfig : ModConfig {
                  "\n - No distance requirement" +
                  "\n - No TownNPC requirement")]
     public bool PylonTweaks { get; set; } = true;
+
+    [Server, RestartRequired, Label("Item Magnet"),
+     Description("Enables the Item Magnet item. Purchase from the Merchant.")]
+    public bool ItemMagnet { get; set; } = true;
 }

@@ -41,6 +41,10 @@
         </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+        <ModAssets Include="**\*.png"/>
+    </ItemGroup>
+
     <Target Name="PackageRelease" AfterTargets="Build">
         <PropertyGroup>
             <ReleasesPath>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '..', '..', 'releases'))</ReleasesPath>
@@ -51,6 +55,8 @@
         <MakeDir Directories="$(StagingPath)"/>
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(StagingPath)"/>
         <Copy SourceFiles="$(MSBuildProjectDirectory)\manifest.json" DestinationFolder="$(StagingPath)"/>
+        <MakeDir Directories="@(ModAssets->'$(StagingPath)\%(RelativeDir)')"/>
+        <Copy SourceFiles="@(ModAssets)" DestinationFiles="@(ModAssets->'$(StagingPath)\%(Identity)')"/>
         <Exec Command="powershell -NoProfile -Command &quot;Remove-Item -LiteralPath '$(ZipPath)' -Force -ErrorAction SilentlyContinue; Compress-Archive -Path '$(StagingPath)' -DestinationPath '$(ZipPath)'&quot;"/>
         <RemoveDir Directories="$(ReleasesPath)\_staging"/>
         <Message Text="Release packaged: $(ZipPath)" Importance="high"/>
@@ -60,5 +66,7 @@
         <MakeDir Directories="$(ModInstallPath)"/>
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModInstallPath)"/>
         <Copy SourceFiles="$(MSBuildProjectDirectory)\manifest.json" DestinationFolder="$(ModInstallPath)"/>
+        <MakeDir Directories="@(ModAssets->'$(ModInstallPath)\%(RelativeDir)')"/>
+        <Copy SourceFiles="@(ModAssets)" DestinationFiles="@(ModAssets->'$(ModInstallPath)\%(Identity)')"/>
     </Target>
 </Project>

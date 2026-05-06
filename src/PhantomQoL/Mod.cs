@@ -1,7 +1,8 @@
+using PhantomQoL.Items;
 using PhantomQoL.Patches;
 using Terraria;
 using TerrariaModder.Core;
-using TerrariaModder.Core.Input;
+using TerrariaModder.Core.Events;
 using TerrariaModder.Core.Logging;
 
 namespace PhantomQoL;
@@ -9,22 +10,19 @@ namespace PhantomQoL;
 public class Mod : IMod, IModLifecycle {
     public string Id      => "phantom-qol";
     public string Name    => "Phantom's QoL";
-    public string Version => "1.4.0";
+    public string Version => "1.5.0";
 
     public static ILogger       _log;
     public static PhantomConfig _config;
     private       string        _modFolder;
-    private       ModContext    _ctx;
 
-    public void Initialize(ModContext context) {
-        _log       = context.Logger;
-        _config    = context.GetConfig<PhantomConfig>();
-        _modFolder = context.ModFolder;
-        _ctx       = context;
+    public void Initialize(ModContext ctx) {
+        _log       = ctx.Logger;
+        _config    = ctx.GetConfig<PhantomConfig>();
+        _modFolder = ctx.ModFolder;
 
-        context.RegisterKeybind("remove-cracked-bricks", "Remove Cracked Dungeon Bricks",
-            "Scans the world and removes cracked dungeon bricks", new KeyCombo(KeyCode.None),
-            CrackedDungeonBrickPatch.RemoveExistingCrackedBricks);
+        Keybinds.Init(ctx);
+        ItemMagnet.Init(ctx);
 
         _log.Info("Phantom's QoL initialized.");
     }
@@ -45,12 +43,16 @@ public class Mod : IMod, IModLifecycle {
     //     Main.npc[args.NPCIndex].active = false;
     // }
 
-    public void OnContentReady(ModContext context) { }
+    public void OnContentReady(ModContext context) {
+        ItemMagnet.RegisterSwap();
+    }
 
     public void OnWorldLoad() {
         SpawnToggleData.SetContext(_modFolder, Main.worldName);
         SpawnToggleData.Load();
 
+        // PlayerEvents.OnPlayerUpdate += ItemMagnet.MagnetPull.OnPlayerUpdate; // not yet implemented in framework
+        FrameEvents.OnPostUpdate += ItemMagnet.MagnetPull;
         //NPCEvents.OnNPCSpawn += OnNPCSpawn;
     }
 
@@ -58,6 +60,8 @@ public class Mod : IMod, IModLifecycle {
         SpawnToggleData.Save();
         SpawnToggleData.Disabled.Clear();
 
+        // PlayerEvents.OnPlayerUpdate -= ItemMagnet.MagnetPull.OnPlayerUpdate;
+        FrameEvents.OnPostUpdate -= ItemMagnet.MagnetPull;
         //NPCEvents.OnNPCSpawn -= OnNPCSpawn;
     }
 
