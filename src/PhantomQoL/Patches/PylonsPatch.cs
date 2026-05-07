@@ -1,6 +1,4 @@
 ﻿using HarmonyLib;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent.Tile_Entities;
 
 namespace PhantomQoL.Patches;
 
