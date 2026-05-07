@@ -35,7 +35,8 @@ public class PhantomConfig : ModConfig {
     [Client, Label("Pylon Tweaks"),
      Description("Tweaks:"                      +
                  "\n - No distance requirement" +
-                 "\n - No TownNPC requirement")]
+                 "\n - No TownNPC requirement"  +
+                 "\n - Can place any amount of any type IF Skeletron has been defeated")]
     public bool PylonTweaks { get; set; } = true;
 
     [Server, RestartRequired, Label("Item Magnet"),

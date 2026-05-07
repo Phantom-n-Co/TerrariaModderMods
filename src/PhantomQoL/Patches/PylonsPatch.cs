@@ -1,4 +1,6 @@
 ﻿using HarmonyLib;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent.Tile_Entities;
 
 namespace PhantomQoL.Patches;
 
@@ -15,10 +17,10 @@ public static class PylonsPatch {
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch("HowManyNPCsDoesPylonNeed")]
-    public static bool Prefix(TeleportPylonInfo info, Player player, ref int __result) {
+    [HarmonyPatch("DoesPylonHaveEnoughNPCsAroundIt")]
+    public static bool Prefix(TeleportPylonInfo info, int necessaryNPCCount, ref bool __result) {
         if (!_config.PylonTweaks) return true;
-        __result = 0;
+        __result = true;
         return false;
     }
 
@@ -32,6 +34,14 @@ public static class PylonsPatch {
     [HarmonyPatch(nameof(TeleportPylonsSystem.HandleTeleportRequest))]
     public static void HandleTeleportRequestPostfix() {
         _runningTeleportRequest = false;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(TeleportPylonsSystem.HasPylonOfType))]
+    public static bool Prefix(TeleportPylonType pylonType, ref bool __result) {
+        if (!NPC.downedBoss3 || !_config.PylonTweaks) return true;
+        __result = false;
+        return false;
     }
 }
 
