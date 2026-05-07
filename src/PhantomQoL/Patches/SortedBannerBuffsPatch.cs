@@ -1,7 +1,7 @@
 ﻿namespace PhantomQoL.Patches;
 
 public class SortedBannerBuffsPatch {
-    public static bool Prefix() {
+    public static bool MouseText_DrawBuffTooltipPrefix() {
         return !Main.bannerMouseOver || !_config.SortedBannerWindow;
         // suppress vanilla tooltip — BannerWindow.OnDraw handles display
     }

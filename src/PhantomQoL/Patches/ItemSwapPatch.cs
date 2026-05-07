@@ -36,7 +36,7 @@ public class ItemSwapPatch {
         ItemID.Sets.HasItemSwap[type] = true;
     }
 
-    public static bool Prefix(Item item) {
+    public static bool TryItemSwapPrefix(Item item) {
         if (!_pairs.TryGetValue(item.type, out var newType)) return true;
 
         item.ChangeItemType(newType);

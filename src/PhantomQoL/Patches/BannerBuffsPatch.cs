@@ -1,7 +1,7 @@
 ﻿namespace PhantomQoL.Patches;
 
 public class BannerBuffsPatch {
-    public static void PostFix() {
+    public static void SceneScanPostFix() {
         if (Main.netMode == 2) return;
         if (!_config.BannerBuff) return;
 

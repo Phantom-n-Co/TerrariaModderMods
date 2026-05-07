@@ -2,7 +2,6 @@ using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using PhantomQoL.Patches;
-using TerrariaModder.Core;
 
 namespace PhantomQoL;
 
@@ -72,24 +71,24 @@ internal static class Patcher {
 
             // SceneMetrics.Scan postfixes access Terraria.exe Main directly; never run on server.
             PatchAll(harmony, sceneScan, "Scan",
-                postfix: M<BannerBuffsPatch>(nameof(BannerBuffsPatch.PostFix)));
+                postfix: M<BannerBuffsPatch>(nameof(BannerBuffsPatch.SceneScanPostFix)));
             PatchAll(harmony, sceneScan, "Scan",
-                postfix: M<GardenGnomePatch>(nameof(GardenGnomePatch.Postfix)));
+                postfix: M<GardenGnomePatch>(nameof(GardenGnomePatch.SceneScanPostfix)));
 
             PatchAll(harmony, player, "ExtractinatorUse",
-                prefix: M<ExtractinatorUsePatch>(nameof(ExtractinatorUsePatch.Prefix)));
+                prefix: M<ExtractinatorUsePatch>(nameof(ExtractinatorUsePatch.ExtractinatorUsePrefix)));
 
             PatchAll(harmony, "Terraria.UI.ItemSlot", "TryItemSwap",
-                prefix: M<ItemSwapPatch>(nameof(ItemSwapPatch.Prefix)));
+                prefix: M<ItemSwapPatch>(nameof(ItemSwapPatch.TryItemSwapPrefix)));
 
             PatchAll(harmony, "Terraria.UI.ItemSlot", "TryOpenContainer",
-                postfix: M<OpenCratesPatch>(nameof(OpenCratesPatch.PostFix)));
+                postfix: M<OpenCratesPatch>(nameof(OpenCratesPatch.TryOpenContainerPostFix)));
 
             PatchAll(harmony, "Terraria.QuickStacking", "QuickStackToNearbyInventories",
-                prefix: M<QuickStackPatch>(nameof(QuickStackPatch.Prefix)));
+                prefix: M<QuickStackPatch>(nameof(QuickStackPatch.QuickStackToNearbyInventoriesPrefix)));
 
             PatchAll(harmony, main, "MouseText_DrawBuffTooltip",
-                prefix: M<SortedBannerBuffsPatch>(nameof(SortedBannerBuffsPatch.Prefix)));
+                prefix: M<SortedBannerBuffsPatch>(nameof(SortedBannerBuffsPatch.MouseText_DrawBuffTooltipPrefix)));
 
             PatchCtor(harmony, "Terraria.GameContent.UI.Elements.UIBestiaryEntryButton", 2,
                 postfix: M<SpawnTogglePatch>(nameof(SpawnTogglePatch.BestiaryButtonCtorPostfix)));
@@ -97,11 +96,12 @@ internal static class Patcher {
                 postfix: M<SpawnTogglePatch>(nameof(SpawnTogglePatch.BestiaryButtonDrawPostfix)));
 
             PatchAll(harmony, main, "MouseText_DrawItemTooltip_GetLinesInfo",
-                postfix: M<VanillaItemTooltipPatch>(nameof(VanillaItemTooltipPatch.Postfix)));
+                postfix: M<VanillaItemTooltipPatch>(nameof(VanillaItemTooltipPatch
+                    .MouseText_DrawItemTooltip_GetLinesInfoPostfix)));
         }
 
         PatchAll(harmony, "Terraria.GameContent.Generation.Dungeon.DungeonUtils", "ChangeTileType",
-            prefix: M<CrackedDungeonBrickPatch>(nameof(CrackedDungeonBrickPatch.Prefix)));
+            prefix: M<CrackedDungeonBrickPatch>(nameof(CrackedDungeonBrickPatch.ChangeTileTypePrefix)));
 
         PatchAll(harmony, "Terraria.NPC", "NewNPC",
             prefix: M<SpawnTogglePatch>(nameof(SpawnTogglePatch.NewNpcPrefix)));

@@ -8,7 +8,7 @@ public class GardenGnomePatch {
         AccessTools.MethodDelegate<Action<SceneMetrics, bool>>(
             AccessTools.PropertySetter(typeof(SceneMetrics), "HasGardenGnome"));
 
-    public static void Postfix() {
+    public static void SceneScanPostfix() {
         if (Main.netMode == 2) return;
         if (!_config.TileBuffsFromInventory) return;
         var player = Main.player[Main.myPlayer];

@@ -17,7 +17,7 @@ public class VanillaItemTooltipPatch {
     public static void Register(Func<int, bool> predicate, string text, Color color, Func<bool>? condition = null) =>
         _entries.Add(new Entry(predicate, text, color, condition));
 
-    public static void Postfix(Item item, ref int numLines, string[] toolTipLine, Color[] lineColors) {
+    public static void MouseText_DrawItemTooltip_GetLinesInfoPostfix(Item item, ref int numLines, string[] toolTipLine, Color[] lineColors) {
         foreach (var entry in _entries) {
             if (numLines >= toolTipLine.Length) break;
             if (entry.Condition != null && !entry.Condition()) continue;

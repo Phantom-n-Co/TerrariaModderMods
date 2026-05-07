@@ -14,7 +14,7 @@ public class QuickStackPatch {
         return map;
     }
 
-    public static void Prefix(Player player) {
+    public static void QuickStackToNearbyInventoriesPrefix(Player player) {
         if (!_config.QuickStackBanners) return;
 
         var counts   = BannerSystem.GetClaimableBannerCounts();
