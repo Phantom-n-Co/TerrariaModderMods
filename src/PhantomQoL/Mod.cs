@@ -9,7 +9,7 @@ namespace PhantomQoL;
 public class Mod : IMod, IModLifecycle {
     public string Id      => "phantom-qol";
     public string Name    => "Phantom's QoL";
-    public string Version => "1.6.0";
+    public string Version => "1.7.0";
 
     public static ILogger       _log;
     public static PhantomConfig _config;

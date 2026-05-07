@@ -1,7 +1,7 @@
 ﻿{
   "id": "phantom-qol",
   "name": "Phantom's QoL",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "author": "Phantom",
   "description": "Miscellaneous QoL things by Phantom",
   "entry_dll": "PhantomQoL.dll",
