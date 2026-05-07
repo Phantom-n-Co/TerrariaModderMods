@@ -6,3 +6,4 @@ global using Terraria.UI;
 global using Terraria.GameContent;
 global using static PhantomQoL.Mod;
 global using TerrariaModder.Core;
+global using Microsoft.Xna.Framework;

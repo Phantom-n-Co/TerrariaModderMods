@@ -22,6 +22,7 @@ public class Mod : IMod, IModLifecycle {
 
         Keybinds.Init(ctx);
         ItemMagnet.Init(ctx);
+        TileBuffs.RegisterTooltips();
 
         _log.Info("Phantom's QoL initialized.");
     }

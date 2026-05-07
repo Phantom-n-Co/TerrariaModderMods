@@ -5,7 +5,7 @@ using TerrariaModder.Core.Assets;
 namespace PhantomQoL.Patches;
 
 /// <summary>
-/// Generic two-way item swap patch mirroring vanilla TryItemSwap behaviour.
+/// Generic two-way item swap patch mirroring vanilla TryItemSwap behavior.
 /// Call Register() after runtime types are assigned (OnContentReady) to add a pair.
 /// </summary>
 [HarmonyPatch(typeof(ItemSlot), "TryItemSwap")]
