@@ -36,7 +36,7 @@ public class PhantomConfig : ModConfig {
          "Right-click NPC entries in the bestiary to toggle their spawning (requires one banner's worth of kills).")]
     public bool BestiaryToggle { get; set; } = true;
 
-    [Client, Label("Pylon Tweaks"),
+    [Server, Label("Pylon Tweaks"),
      Description("Tweaks:"                      +
                  "\n - No distance requirement" +
                  "\n - No TownNPC requirement"  +
@@ -57,8 +57,8 @@ public class PhantomConfig : ModConfig {
      Description("Campfire, Heart Lantern, Peace Candle, Star in a Bottle, Sunflower, and Cat Bast" +
                  "\napply their buff while in your inventory or any bank/vault.")]
     public bool TileBuffsFromInventory { get; set; } = true;
-    
+
     [Client, Label("Fast Extractinator"),
-    Description("Makes using the Extractinator really fast")]
+     Description("Makes using the Extractinator really fast")]
     public bool FastExtractinator { get; set; } = true;
 }

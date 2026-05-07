@@ -1,9 +1,6 @@
-using HarmonyLib;
-
 namespace PhantomQoL.Patches;
 
-[HarmonyPatch(typeof(QuickStacking), nameof(QuickStacking.QuickStackToNearbyInventories))]
-public static class QuickStackPatch {
+public class QuickStackPatch {
     private static readonly Dictionary<int, int> _itemToBanner = BuildLookup();
 
     private static Dictionary<int, int> BuildLookup() {
@@ -17,7 +14,6 @@ public static class QuickStackPatch {
         return map;
     }
 
-    [HarmonyPrefix]
     public static void Prefix(Player player) {
         if (!_config.QuickStackBanners) return;
 

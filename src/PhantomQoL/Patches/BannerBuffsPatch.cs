@@ -1,11 +1,8 @@
-﻿using HarmonyLib;
+﻿namespace PhantomQoL.Patches;
 
-namespace PhantomQoL.Patches;
-
-[HarmonyPatch(typeof(SceneMetrics), nameof(SceneMetrics.Scan))]
-public static class BannerBuffsPatch {
-    [HarmonyPostfix]
+public class BannerBuffsPatch {
     public static void PostFix() {
+        if (Main.netMode == 2) return;
         if (!_config.BannerBuff) return;
 
         var claimableBannerCounts = BannerSystem.GetClaimableBannerCounts();

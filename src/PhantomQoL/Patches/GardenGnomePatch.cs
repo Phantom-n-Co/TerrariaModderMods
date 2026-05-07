@@ -3,14 +3,13 @@ using HarmonyLib;
 
 namespace PhantomQoL.Patches;
 
-[HarmonyPatch(typeof(SceneMetrics), nameof(SceneMetrics.Scan))]
-public static class GardenGnomePatch {
+public class GardenGnomePatch {
     private static readonly Action<SceneMetrics, bool> _setHasGardenGnome =
         AccessTools.MethodDelegate<Action<SceneMetrics, bool>>(
             AccessTools.PropertySetter(typeof(SceneMetrics), "HasGardenGnome"));
 
-    [HarmonyPostfix]
     public static void Postfix() {
+        if (Main.netMode == 2) return;
         if (!_config.TileBuffsFromInventory) return;
         var player = Main.player[Main.myPlayer];
         if (player == null || player.dead) return;

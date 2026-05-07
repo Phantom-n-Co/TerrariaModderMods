@@ -1,12 +1,14 @@
-﻿using HarmonyLib;
+﻿namespace PhantomQoL.Patches;
 
-namespace PhantomQoL.Patches;
-
-[HarmonyPatch(typeof(Main), nameof(Main.NPCChatText_DoAnglerQuest))]
-public static class AnglerQuestPatch {
-    [HarmonyPostfix]
+public class AnglerQuestPatch {
     public static void Postfix() {
         if (!_config.InstantAnglerRefresh) return;
-        if (Main.anglerQuestFinished) Main.AnglerQuestSwap();
+        if (!Main.anglerQuestFinished) return;
+
+        if (Main.netMode == 0) Main.AnglerQuestSwap();
+        else {
+            Main.anglerQuestFinished = false;
+            Main.anglerQuest         = Main.rand.Next(Main.anglerQuestItemNetIDs.Length);
+        }
     }
 }

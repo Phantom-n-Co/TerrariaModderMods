@@ -45,15 +45,6 @@
         <ModAssets Include="**\*.png"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Content Include="$(TerrariaPath)\TerrariaModder\core\logs\TerrariaInjector.log">
-            <Link>logs\TerrariaInjector.log</Link>
-        </Content>
-        <Content Include="$(TerrariaPath)\TerrariaModder\core\logs\terrariamodder.log">
-            <Link>logs\terrariamodder.log</Link>
-        </Content>
-    </ItemGroup>
-
     <Target Name="PackageRelease" AfterTargets="Build">
         <PropertyGroup>
             <ReleasesPath>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '..', '..', 'releases'))</ReleasesPath>

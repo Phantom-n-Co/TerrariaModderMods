@@ -3,8 +3,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using HarmonyLib;
-using Microsoft.Xna.Framework;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.UI.Elements;
 
@@ -59,7 +57,9 @@ public static class SpawnToggleData {
     }
 
     private static void Deserialize(string json) {
-        var match = Regex.Match(json, @"""disabledNpcTypes""\s*:\s*\[([^\]]*)\]");
+        var match = Regex.Match(json, """
+                                      "disabledNpcTypes"\s*:\s*\[([^\]]*)\]
+                                      """);
         if (!match.Success) return;
         foreach (var token in match.Groups[1].Value.Split(','))
             if (int.TryParse(token.Trim(), out var id))
@@ -80,10 +80,19 @@ public static class SpawnToggleData {
     }
 }
 
-[HarmonyPatch(typeof(UIBestiaryEntryButton), MethodType.Constructor, typeof(BestiaryEntry), typeof(bool))]
-public static class BestiaryButtonCtorPatch {
-    [HarmonyPostfix]
-    public static void Postfix(UIBestiaryEntryButton __instance, BestiaryEntry entry) {
+public class SpawnTogglePatch {
+    private static readonly FieldInfo BordersField =
+        typeof(UIBestiaryEntryButton).GetField("_borders", BindingFlags.NonPublic | BindingFlags.Instance);
+
+    private const int MaxRetries = 100;
+
+    [ThreadStatic] public static  bool     InSpawnerContext;
+    [ThreadStatic] public static  bool     RerollNeeded;
+    [ThreadStatic] private static int      _retryCount;
+    [ThreadStatic] private static object   _instance;
+    [ThreadStatic] private static object[] _args;
+
+    public static void BestiaryButtonCtorPostfix(UIBestiaryEntryButton __instance, BestiaryEntry entry) {
         var netIdElement = entry.Info.OfType<NPCNetIdBestiaryInfoElement>().FirstOrDefault();
         if (netIdElement == null) return;
         var npcNetId = netIdElement.NetId;
@@ -111,15 +120,8 @@ public static class BestiaryButtonCtorPatch {
 
         SpawnToggleData.Save();
     }
-}
 
-[HarmonyPatch(typeof(UIBestiaryEntryButton), "DrawSelf")]
-public static class BestiaryButtonDrawPatch {
-    private static readonly FieldInfo BordersField =
-        typeof(UIBestiaryEntryButton).GetField("_borders", BindingFlags.NonPublic | BindingFlags.Instance);
-
-    [HarmonyPostfix]
-    public static void Postfix(UIBestiaryEntryButton __instance) {
+    public static void BestiaryButtonDrawPostfix(UIBestiaryEntryButton __instance) {
         if (!_config.BestiaryToggle) return;
         var netIdElement = __instance.Entry.Info.OfType<NPCNetIdBestiaryInfoElement>().FirstOrDefault();
         if (netIdElement == null) return;
@@ -129,43 +131,19 @@ public static class BestiaryButtonDrawPatch {
         if (BordersField?.GetValue(__instance) is UIImage borders)
             borders.Color = disabled ? new Color(255, 80, 80) : Color.White;
     }
-}
 
-[HarmonyPatch(typeof(NPC), nameof(NPC.NewNPC))]
-public static class NewNpcPatch {
-    [HarmonyPrefix]
-    public static bool Prefix(int Type, ref int __result) {
+    public static bool NewNpcPrefix(int Type, ref int __result) {
         if (!_config.BestiaryToggle) return true;
         if (!SpawnToggleData.Disabled.Contains(Type) &&
             !SpawnToggleData.Disabled.Contains(NPCID.FromNetId(Type))) return true;
         __result = Main.maxNPCs;
-        if (SpawnAnNpcPatch.InSpawnerContext)
-            SpawnAnNpcPatch.RerollNeeded = true;
+        if (InSpawnerContext)
+            RerollNeeded = true;
         return false;
     }
-}
 
-/// <summary>
-/// Due to how "awful" the spawner code is, we have to do this to lessen the chances of reducing spawn rates due to
-/// blocking spawns. I'd like if there was a better way to do this, but this is the best I could come up with.
-/// Or, I might just be stupid, IDK, don't care. It works:tm:, which is good enough for now.
-/// </summary>
-[HarmonyPatch(typeof(NPC.Spawner), nameof(NPC.Spawner.SpawnAnNPC))]
-public static class SpawnAnNpcPatch {
-    private const int MaxRetries = 100;
-
-    [ThreadStatic] public static  bool     InSpawnerContext;
-    [ThreadStatic] public static  bool     RerollNeeded;
-    [ThreadStatic] private static int      _retryCount;
-    [ThreadStatic] private static object   _instance;
-    [ThreadStatic] private static object[] _args;
-
-    private static readonly MethodInfo Method =
-        typeof(NPC.Spawner).GetMethod("SpawnAnNPC", BindingFlags.Public | BindingFlags.Instance);
-
-    [HarmonyPrefix]
-    public static void Prefix(object __instance,
-                              int    spawnTileX, int spawnTileY, int spawnTileType, bool xRange, int target) {
+    public static void SpawnAnNpcPrefix(object __instance,
+                                        int    spawnTileX, int spawnTileY, int spawnTileType, bool xRange, int target) {
         if (_retryCount == 0) {
             InSpawnerContext = true;
             _instance        = __instance;
@@ -175,12 +153,18 @@ public static class SpawnAnNpcPatch {
         RerollNeeded = false;
     }
 
-    [HarmonyPostfix]
-    public static void Postfix() {
+    /// <summary>
+    /// Due to how "awful" the spawner code is, we have to do this to lessen the chances of reducing spawn rates due to
+    /// blocking spawns. I'd like if there was a better way to do this, but this is the best I could come up with.
+    /// Or, I might just be stupid, IDK, don't care. It works:tm:, which is good enough for now.
+    /// </summary>
+    public static void SpawnAnNpcPostfix() {
         if (RerollNeeded && _retryCount < MaxRetries) {
             _retryCount++;
             RerollNeeded = false;
-            Method.Invoke(_instance, _args);
+            _instance.GetType()
+                .GetMethod("SpawnAnNPC", BindingFlags.Public | BindingFlags.Instance)
+                ?.Invoke(_instance, _args);
             return;
         }
 

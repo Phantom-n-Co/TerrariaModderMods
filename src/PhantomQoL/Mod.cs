@@ -1,3 +1,4 @@
+using HarmonyLib;
 using PhantomQoL.Features;
 using PhantomQoL.Items;
 using PhantomQoL.Patches;
@@ -12,15 +13,18 @@ public class Mod : IMod, IModLifecycle {
     public string Name    => "Phantom's QoL";
     public string Version => "1.7.0";
 
-    public static ILogger       _log;
-    public static PhantomConfig _config;
-    private       string        _modFolder;
+    public static  ILogger       _log;
+    public static  PhantomConfig _config;
+    private        string        _modFolder;
+    private static Harmony       _harmony;
+    private const  string        harmonyId = "dev.wp.qol";
 
     public void Initialize(ModContext ctx) {
         _log       = ctx.Logger;
         _config    = ctx.GetConfig<PhantomConfig>();
         _modFolder = ctx.ModFolder;
 
+        _harmony = new Harmony(harmonyId);
         Keybinds.Init(ctx);
         ItemMagnet.Init(ctx);
         TileBuffs.RegisterTooltips();
@@ -45,6 +49,8 @@ public class Mod : IMod, IModLifecycle {
     // }
 
     public void OnContentReady(ModContext context) {
+        Patcher.Apply(_harmony);
+
         ItemMagnet.RegisterSwap();
     }
 
@@ -72,5 +78,8 @@ public class Mod : IMod, IModLifecycle {
 
     public void OnConfigChanged() { }
 
-    public void Unload() { }
+    public void Unload() {
+        _harmony?.UnpatchAll(harmonyId);
+        _log.Info("Phantom's QoL unloaded");
+    }
 }

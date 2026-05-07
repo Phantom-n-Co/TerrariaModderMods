@@ -1,11 +1,8 @@
 ﻿using System.Reflection;
-using HarmonyLib;
 
 namespace PhantomQoL.Patches;
 
-[HarmonyPatch(typeof(ItemSlot), "TryOpenContainer")]
-public static class OpenCratesPatch {
-    [HarmonyPostfix]
+public class OpenCratesPatch {
     public static void PostFix(Item[] inv, int context, int slot, Player player) {
         if (!_config.OpenAllCrates || inv[slot].stack <= 0) return;
 

@@ -1,4 +1,3 @@
-using HarmonyLib;
 using Terraria.Audio;
 using TerrariaModder.Core.Assets;
 
@@ -8,8 +7,7 @@ namespace PhantomQoL.Patches;
 /// Generic two-way item swap patch mirroring vanilla TryItemSwap behavior.
 /// Call Register() after runtime types are assigned (OnContentReady) to add a pair.
 /// </summary>
-[HarmonyPatch(typeof(ItemSlot), "TryItemSwap")]
-public static class ItemSwapPatch {
+public class ItemSwapPatch {
     private static readonly Dictionary<int, int> _pairs = new();
 
     /// <summary>Register a swap pair by full item IDs ("modid:name").</summary>
@@ -38,7 +36,6 @@ public static class ItemSwapPatch {
         ItemID.Sets.HasItemSwap[type] = true;
     }
 
-    [HarmonyPrefix]
     public static bool Prefix(Item item) {
         if (!_pairs.TryGetValue(item.type, out var newType)) return true;
 
