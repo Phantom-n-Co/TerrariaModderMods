@@ -1,6 +1,7 @@
 using PhantomQoL.Features;
 using PhantomQoL.Items;
 using PhantomQoL.Patches;
+using PhantomQoL.UI;
 using TerrariaModder.Core.Events;
 using TerrariaModder.Core.Logging;
 
@@ -54,6 +55,7 @@ public class Mod : IMod, IModLifecycle {
         // PlayerEvents.OnPlayerUpdate += ItemMagnet.MagnetPull.OnPlayerUpdate; // not yet implemented in framework
         FrameEvents.OnPostUpdate += ItemMagnet.MagnetPull;
         FrameEvents.OnPostUpdate += TileBuffs.ApplyBuffs;
+        FrameEvents.OnUIOverlay  += BannerWindow.OnDraw;
         //NPCEvents.OnNPCSpawn += OnNPCSpawn;
     }
 
@@ -64,6 +66,7 @@ public class Mod : IMod, IModLifecycle {
         // PlayerEvents.OnPlayerUpdate -= ItemMagnet.MagnetPull.OnPlayerUpdate;
         FrameEvents.OnPostUpdate -= ItemMagnet.MagnetPull;
         FrameEvents.OnPostUpdate -= TileBuffs.ApplyBuffs;
+        FrameEvents.OnUIOverlay  -= BannerWindow.OnDraw;
         //NPCEvents.OnNPCSpawn -= OnNPCSpawn;
     }
 

@@ -15,6 +15,10 @@ public class PhantomConfig : ModConfig {
      Description("Claimable Banners in the Banner UI apply their buff at all times.")]
     public bool BannerBuff { get; set; } = true;
 
+    [Client, Label("Sorted Banner Window"),
+     Description("Replaces the vanilla banner buff tooltip with a sorted list of all active banner effects.")]
+    public bool SortedBannerWindow { get; set; } = true;
+
     [Client, Label("Banner Quick Stack"),
      FormerlySerializedAs("QuickStackBannersEnabled"),
      Description(
